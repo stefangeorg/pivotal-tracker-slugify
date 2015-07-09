@@ -12,8 +12,17 @@ def slugify(value):
     value = re.sub('[^\w\s-]', '', value).strip().lower()
     return re.sub('[-\s]+', '-', value)
 
+def get_tasks(token, project_id):
+  headers = [
+    ['X-TrackerToken', token]
+  ]
+  url = "https://www.pivotaltracker.com/services/v5/projects/%(project_id)s/stories?date_format=millis&with_state=unstarted"
+       % {'project_id':project_id}
 
-text = " ".join(sys.argv[1:])
+TOKEN = os.environ.get('PIVOTAL_TRACKER_TOKEN')
+PROJECT_ID = os.environ.get('PIVOTAL_PROJECT_ID')
+
+text = " ".join(sys.argv[1:]).trim()
 replacements = [
   ['bug-', 'bug/'],
   ['feature-', 'feature/'],
